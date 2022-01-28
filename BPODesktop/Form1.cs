@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BPOBackend;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,9 @@ namespace BPODesktop
         public Form1()
         {
             InitializeComponent();
+            ddlUser.DataSource = AspNetUserBl.Instance.GetAspNetUser();
+            ddlUser.DisplayMember="UserName";
+            ddlUser.ValueMember ="Id";
         }
 
     }
