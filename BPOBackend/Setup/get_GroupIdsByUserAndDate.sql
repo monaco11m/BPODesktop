@@ -1,10 +1,10 @@
 create or replace function get_GroupIdsByUserAndDate(userId text,startDate date,endDate date)
-returns table(id bigint)
+returns table(AutomateId bigint)
 as
 $$
 begin
 return query
-select distinct (a."AutomateId")
+select distinct (a."AutomateId") as AutomateId
 from "AutomateLabels" a
 where a."UserId"=userId and a."CreatedDate" between startDate and endDate;
 end

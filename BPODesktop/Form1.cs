@@ -21,5 +21,16 @@ namespace BPODesktop
             ddlUser.ValueMember ="Id";
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DownloadAndMergeAsync();
+        }
+        private async Task DownloadAndMergeAsync()
+        {
+            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
+
+            await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
+            LabelStorageUrlsBl.Instance.MergePdf(list, true);
+        }
     }
 }
