@@ -40,13 +40,14 @@ namespace BPODesktop
             this.dtStartDate = new System.Windows.Forms.DateTimePicker();
             this.dtEndDate = new System.Windows.Forms.DateTimePicker();
             this.ddlGroupId = new System.Windows.Forms.ComboBox();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // ddlUser
             // 
             this.ddlUser.FormattingEnabled = true;
             this.ddlUser.Location = new System.Drawing.Point(114, 49);
-            this.ddlUser.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlUser.Margin = new System.Windows.Forms.Padding(2);
             this.ddlUser.Name = "ddlUser";
             this.ddlUser.Size = new System.Drawing.Size(135, 21);
             this.ddlUser.TabIndex = 0;
@@ -94,7 +95,7 @@ namespace BPODesktop
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(265, 226);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(70, 20);
             this.button1.TabIndex = 5;
@@ -107,7 +108,7 @@ namespace BPODesktop
             this.dtStartDate.CustomFormat = "yyyy-MM-dd";
             this.dtStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtStartDate.Location = new System.Drawing.Point(114, 86);
-            this.dtStartDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dtStartDate.Margin = new System.Windows.Forms.Padding(2);
             this.dtStartDate.Name = "dtStartDate";
             this.dtStartDate.Size = new System.Drawing.Size(135, 20);
             this.dtStartDate.TabIndex = 6;
@@ -118,7 +119,7 @@ namespace BPODesktop
             this.dtEndDate.CustomFormat = "yyyy-MM-dd";
             this.dtEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtEndDate.Location = new System.Drawing.Point(114, 125);
-            this.dtEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dtEndDate.Margin = new System.Windows.Forms.Padding(2);
             this.dtEndDate.Name = "dtEndDate";
             this.dtEndDate.Size = new System.Drawing.Size(135, 20);
             this.dtEndDate.TabIndex = 7;
@@ -128,10 +129,14 @@ namespace BPODesktop
             // 
             this.ddlGroupId.FormattingEnabled = true;
             this.ddlGroupId.Location = new System.Drawing.Point(114, 163);
-            this.ddlGroupId.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlGroupId.Margin = new System.Windows.Forms.Padding(2);
             this.ddlGroupId.Name = "ddlGroupId";
             this.ddlGroupId.Size = new System.Drawing.Size(135, 21);
             this.ddlGroupId.TabIndex = 8;
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
             // 
             // Form1
             // 
@@ -147,7 +152,7 @@ namespace BPODesktop
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ddlUser);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -166,6 +171,7 @@ namespace BPODesktop
         private System.Windows.Forms.DateTimePicker dtStartDate;
         private DateTimePicker dtEndDate;
         private ComboBox ddlGroupId;
+        private SaveFileDialog saveFileDialog;
     }
 }
 

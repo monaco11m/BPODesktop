@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace BPODesktop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DownloadAndMergeAsync();
+            ShowDialogToSaveFile();
+            //DownloadAndMergeAsync();
         }
         private async Task DownloadAndMergeAsync()
         {
@@ -41,7 +43,6 @@ namespace BPODesktop
         {
             LoadGroupIds();
         }
-
         private void LoadGroupIds()
         {
             DateTime strStartDate = dtStartDate.Value;
@@ -50,7 +51,13 @@ namespace BPODesktop
             ddlGroupId.DisplayMember = "Id";
             ddlGroupId.ValueMember = "Id";
         }
-
+        private void ShowDialogToSaveFile()
+        {
+            if(saveFileDialog.ShowDialog()== DialogResult.OK)
+            {
+                String path = saveFileDialog.FileName;
+            }
+        }
         
     }
 }
