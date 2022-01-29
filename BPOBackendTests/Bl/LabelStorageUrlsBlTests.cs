@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks.Dataflow;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BPOBackend.Tests
 {
@@ -24,7 +25,7 @@ namespace BPOBackend.Tests
         {
             List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
 
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
+            await DownloadHelper.DownloadListAsync(list,"");
             Assert.True(true, "This test needs an implementation");
         }
 
@@ -38,7 +39,7 @@ namespace BPOBackend.Tests
                 "6bf1a520-5b28-435e-a909-df497ba7e703.pdf"
             };
 
-            LabelStorageUrlsBl.Instance.MergePdf(list);
+            LabelStorageUrlsBl.Instance.MergePdf(list,"Test.pdf");
             Assert.NotNull(list);
         }
         [Fact()]
@@ -46,10 +47,12 @@ namespace BPOBackend.Tests
         {
             var sw = new Stopwatch();
             sw.Start();
-            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
 
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
-            LabelStorageUrlsBl.Instance.MergePdf(list, true);
+            String fileName = "D:\\cj\\Elmo\\downloads\\mergedFile.pdf";
+
+            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+            await LabelStorageUrlsBl.Instance.DownloadListAsync(list, LabelStorageUrlsBl.Instance.GetPathFromAppSetting());
+            LabelStorageUrlsBl.Instance.MergePdf(list.Select(x=>x.Url).ToList(), fileName, true);
             long ms = sw.ElapsedMilliseconds;
             sw.Stop();
             Assert.True(ms > 0);
@@ -60,6 +63,13 @@ namespace BPOBackend.Tests
         {
             String result = LabelStorageUrlsBl.Instance.GetPathFromAppSetting();
             Assert.NotNull(result);
+        }
+
+        [Fact()]
+        public void GetUrlsByParametersTest()
+        {
+            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+            Assert.NotNull(list);
         }
     }
 }

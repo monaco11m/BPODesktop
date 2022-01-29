@@ -8,13 +8,16 @@ namespace BPOBackend
 {
     public class PdfHelper
     {
-        private PdfHelper()
+        private static PdfHelper instance = null;
+        public static PdfHelper Instance
         {
+            get
+            {
+                return instance ?? new PdfHelper();
+            }
         }
 
-        public static PdfHelper Instance { get; } = new PdfHelper();
-
-        public void SaveImageAsPdf(string imageFileName, string pdfFileName, int width = 600, bool deleteImage = false)
+        public void SaveImageAsPdf(String imageFileName, String pdfFileName, int width = 600, bool deleteImage = false)
         {
             try
             {

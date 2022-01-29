@@ -4,6 +4,7 @@ using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,22 +27,32 @@ namespace BPOBackend
         {
             return LabelStorageUrlsDao.Instance.GetUrls();
         }
-        public async Task DownloadListAsync(List<String> rest)
+        public List<LabelStorageUrl> GetUrlsByParameters(String userId, Int32 groupId)
+        {
+            return LabelStorageUrlsDao.Instance.GetUrlsByParameters(userId,groupId);
+        }
+        public async Task DownloadListAsync(List<LabelStorageUrl> list, String path)
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var block = new ActionBlock<String>(async link =>
+                    var block = new ActionBlock<LabelStorageUrl>(async label =>
                     {
-                        await DownloadHelper.DownloadFileAsync(httpClient, link);
+                        await DownloadHelper.DownloadFileAsync(httpClient, path, label.Url);
+                        if (label.Format.Equals("PNG")) {
+                            String[] splitedFileUrl = label.Url.Split('/');
+                            String[] splitedFileName = splitedFileUrl[splitedFileUrl.Length-1].Split('.');
+
+                            PdfHelper.Instance.SaveImageAsPdf(path+splitedFileUrl[splitedFileUrl.Length - 1], path + splitedFileName[0]+".pdf");
+                        }
                     }, new ExecutionDataflowBlockOptions()
                     {
                         MaxDegreeOfParallelism = 10
                     });
-                    foreach (var link in rest)
+                    foreach (LabelStorageUrl label in list)
                     {
-                        await block.SendAsync(link);
+                        await block.SendAsync(label);
                     }
                     block.Complete();
                     await block.Completion;
@@ -52,11 +63,13 @@ namespace BPOBackend
 
             }
         }
-        public void MergePdf(List<String> list,Boolean splitPdfName=false)
+        public void MergePdf(List<String> list,String fileName,Boolean splitPdfName=false)
         {
             try
             {
-                String path = "D:\\cj\\Elmo\\downloads\\";
+                String[] fileNameSplited = fileName.Split('\\');
+                String onlyName = fileNameSplited[fileNameSplited.Length - 1];
+                String path = fileName.Substring(0, fileName.Length - onlyName.Length);
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 PdfDocument outputDocument = new PdfDocument
                 {
@@ -91,7 +104,7 @@ namespace BPOBackend
 
                     }
                 }
-                outputDocument.Save(path+"MergedPdf.pdf");
+                outputDocument.Save(fileName);
             }
             catch(Exception ex)
             {

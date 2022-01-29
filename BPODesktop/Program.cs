@@ -19,20 +19,9 @@ namespace BPODesktop
         [STAThread]
         static void Main()
         {
-            //DownloadMassiveAsync();
-            //String result = LabelStorageUrlsBl.Instance.GetPathFromAppSetting();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
-
-        static async Task DownloadMassiveAsync()
-        {
-            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
-
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
-        }
-
-        
     }
 }

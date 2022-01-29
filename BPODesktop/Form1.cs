@@ -25,14 +25,12 @@ namespace BPODesktop
         private void button1_Click(object sender, EventArgs e)
         {
             ShowDialogToSaveFile();
-            //DownloadAndMergeAsync();
         }
-        private async Task DownloadAndMergeAsync()
+        private async Task DownloadAndMergeAsync(String fileName)
         {
-            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
-
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
-            LabelStorageUrlsBl.Instance.MergePdf(list, true);
+            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+            await LabelStorageUrlsBl.Instance.DownloadListAsync(list, LabelStorageUrlsBl.Instance.GetPathFromAppSetting());
+            LabelStorageUrlsBl.Instance.MergePdf(list.Select(x => x.Url).ToList(), fileName, true);
         }
 
         private void dtStartDate_ValueChanged(object sender, EventArgs e)
@@ -55,7 +53,7 @@ namespace BPODesktop
         {
             if(saveFileDialog.ShowDialog()== DialogResult.OK)
             {
-                String path = saveFileDialog.FileName;
+                DownloadAndMergeAsync(saveFileDialog.FileName);
             }
         }
         

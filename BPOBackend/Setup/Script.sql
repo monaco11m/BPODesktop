@@ -6,8 +6,9 @@ begin
 return query
 select l."Url"
 from "LabelStorageUrls" l 
+where l."Format"='PNG'
 --where l."UserId"='fe69add2-2149-44dc-9415-cdd640b36925';
-limit 1000; 
+limit 5000; 
 end
 $$
 language plpgsql
@@ -42,11 +43,11 @@ where a."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' and a."AutomateId"=1
 limit 100
 
 
-select count(1),t."TrackingNumber"
+select count(1),t."ShipmentGroupId"
 from "Transactions" t
 --where t."ShipmentGroupId"=0
-where t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925'  --and t."ShipmentGroupId"=52
-group by t."TrackingNumber"
+--where t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925'  --and t."ShipmentGroupId"=52
+group by t."ShipmentGroupId"
 limit 100
 
 

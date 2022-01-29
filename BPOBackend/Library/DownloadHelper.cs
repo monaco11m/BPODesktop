@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace BPOBackend
 {
-    public class DownloadHelper
+    public static class DownloadHelper
     {
-        public static async Task DownloadFileAsync(HttpClient httpClient, String link)
+        public static async Task DownloadFileAsync(HttpClient httpClient, String path,String link)
         {
             try
             {
                 String[] splitedLink = link.Split('/');
-                String filePath = Path.Combine("D:\\cj\\Elmo\\downloads", splitedLink[splitedLink.Length - 1]);
+                String filePath = Path.Combine(path, splitedLink[splitedLink.Length - 1]);
                 if (File.Exists(filePath)) return;
                 var response = await httpClient.GetAsync(link);
                 response.EnsureSuccessStatusCode();
@@ -21,6 +23,32 @@ namespace BPOBackend
                     FileAccess.Write, FileShare.None, 32768, FileOptions.Asynchronous))
                 {
                     await contentStream.CopyToAsync(fileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public static async Task DownloadListAsync(List<String> list, String path)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var block = new ActionBlock<String>(async link =>
+                    {
+                        await DownloadFileAsync(httpClient, path, link);
+                    }, new ExecutionDataflowBlockOptions()
+                    {
+                        MaxDegreeOfParallelism = 10
+                    });
+                    foreach (String link in list)
+                    {
+                        await block.SendAsync(link);
+                    }
+                    block.Complete();
+                    await block.Completion;
                 }
             }
             catch (Exception ex)
