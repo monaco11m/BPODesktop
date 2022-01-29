@@ -16,9 +16,9 @@ namespace BPOBackend
                 return instance ?? new AutomateLabelsDao();
             }
         }
-        public List<Int64> GetIdsByUserIdAndDate(String userId,DateTime startDate,DateTime endDate)
+        public List<AutomateLabel> GetIdsByUserIdAndDate(String userId,DateTime startDate,DateTime endDate)
         {
-            List<Int64> result = new List<Int64>();
+            List<AutomateLabel> result = new List<AutomateLabel>();
             using (var connection = ConnectionDao.Instance.GetConnection())
             {
                 connection.Open();
@@ -30,7 +30,10 @@ namespace BPOBackend
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    result.Add(Convert.ToInt64(reader["AutomateId"]));
+                    result.Add(new AutomateLabel
+                    {
+                        Id = Convert.ToInt64(reader["AutomateId"])
+                    });
                 }
             }
             return result;

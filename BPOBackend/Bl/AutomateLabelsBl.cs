@@ -16,7 +16,7 @@ namespace BPOBackend
                 return instance ?? new AutomateLabelsBl();
             }
         }
-        public List<Int64> GetIdsByUserIdAndDate(String userId, DateTime startDate, DateTime endDate)
+        public List<AutomateLabel> GetIdsByUserIdAndDate(String userId, DateTime startDate, DateTime endDate)
         {
             return AutomateLabelsDao.Instance.GetIdsByUserIdAndDate(userId, startDate, endDate);
         }

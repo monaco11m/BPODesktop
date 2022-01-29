@@ -45,52 +45,58 @@ namespace BPODesktop
             // ddlUser
             // 
             this.ddlUser.FormattingEnabled = true;
-            this.ddlUser.Location = new System.Drawing.Point(171, 76);
+            this.ddlUser.Location = new System.Drawing.Point(114, 49);
+            this.ddlUser.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddlUser.Name = "ddlUser";
-            this.ddlUser.Size = new System.Drawing.Size(200, 28);
+            this.ddlUser.Size = new System.Drawing.Size(135, 21);
             this.ddlUser.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(60, 79);
+            this.label1.Location = new System.Drawing.Point(40, 51);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 20);
+            this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "User";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(60, 140);
+            this.label2.Location = new System.Drawing.Point(40, 91);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 20);
+            this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Start Date";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(60, 199);
+            this.label3.Location = new System.Drawing.Point(40, 129);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 20);
+            this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 3;
             this.label3.Text = "End Date";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(60, 260);
+            this.label4.Location = new System.Drawing.Point(40, 169);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 20);
+            this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 4;
             this.label4.Text = "Group Id";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(397, 348);
+            this.button1.Location = new System.Drawing.Point(265, 226);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 31);
+            this.button1.Size = new System.Drawing.Size(70, 20);
             this.button1.TabIndex = 5;
             this.button1.Text = "Download";
             this.button1.UseVisualStyleBackColor = true;
@@ -100,33 +106,38 @@ namespace BPODesktop
             // 
             this.dtStartDate.CustomFormat = "yyyy-MM-dd";
             this.dtStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtStartDate.Location = new System.Drawing.Point(171, 133);
+            this.dtStartDate.Location = new System.Drawing.Point(114, 86);
+            this.dtStartDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtStartDate.Name = "dtStartDate";
-            this.dtStartDate.Size = new System.Drawing.Size(200, 26);
+            this.dtStartDate.Size = new System.Drawing.Size(135, 20);
             this.dtStartDate.TabIndex = 6;
+            this.dtStartDate.ValueChanged += new System.EventHandler(this.dtStartDate_ValueChanged);
             // 
             // dtEndDate
             // 
             this.dtEndDate.CustomFormat = "yyyy-MM-dd";
             this.dtEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtEndDate.Location = new System.Drawing.Point(171, 192);
+            this.dtEndDate.Location = new System.Drawing.Point(114, 125);
+            this.dtEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtEndDate.Name = "dtEndDate";
-            this.dtEndDate.Size = new System.Drawing.Size(200, 26);
+            this.dtEndDate.Size = new System.Drawing.Size(135, 20);
             this.dtEndDate.TabIndex = 7;
+            this.dtEndDate.ValueChanged += new System.EventHandler(this.dtEndDate_ValueChanged);
             // 
             // ddlGroupId
             // 
             this.ddlGroupId.FormattingEnabled = true;
-            this.ddlGroupId.Location = new System.Drawing.Point(171, 251);
+            this.ddlGroupId.Location = new System.Drawing.Point(114, 163);
+            this.ddlGroupId.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddlGroupId.Name = "ddlGroupId";
-            this.ddlGroupId.Size = new System.Drawing.Size(200, 28);
+            this.ddlGroupId.Size = new System.Drawing.Size(135, 21);
             this.ddlGroupId.TabIndex = 8;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(533, 292);
             this.Controls.Add(this.ddlGroupId);
             this.Controls.Add(this.dtEndDate);
             this.Controls.Add(this.dtStartDate);
@@ -136,6 +147,7 @@ namespace BPODesktop
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ddlUser);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

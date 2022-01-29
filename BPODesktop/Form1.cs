@@ -32,5 +32,25 @@ namespace BPODesktop
             await LabelStorageUrlsBl.Instance.DownloadListAsync(list);
             LabelStorageUrlsBl.Instance.MergePdf(list, true);
         }
+
+        private void dtStartDate_ValueChanged(object sender, EventArgs e)
+        {
+            LoadGroupIds();
+        }
+        private void dtEndDate_ValueChanged(object sender, EventArgs e)
+        {
+            LoadGroupIds();
+        }
+
+        private void LoadGroupIds()
+        {
+            DateTime strStartDate = dtStartDate.Value;
+            List<AutomateLabel> result = AutomateLabelsBl.Instance.GetIdsByUserIdAndDate((String)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
+            ddlGroupId.DataSource = result;
+            ddlGroupId.DisplayMember = "Id";
+            ddlGroupId.ValueMember = "Id";
+        }
+
+        
     }
 }
