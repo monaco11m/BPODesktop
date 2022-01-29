@@ -86,12 +86,11 @@ namespace BPOBackend
                             String[] pdfNameSplited = pdf.Split('/');
                             pdfName = pdfNameSplited[pdfNameSplited.Length - 1];
                         }
-                        //String[] splitedPdfName = pdfName.Split('.');
-                        //if (!splitedPdfName[splitedPdfName.Length-1].Equals("pdf")&& !splitedPdfName[splitedPdfName.Length - 1].Equals("PDF"))
-                        //{
-                        //    PdfHelper.Instance.SaveImageAsPdf(path + pdfName, path + splitedPdfName[0]+".pdf");
-                        //    pdfName = splitedPdfName[0] + ".pdf";
-                        //}
+                        String[] splitedPdfName = pdfName.Split('.');
+                        if (!splitedPdfName[splitedPdfName.Length - 1].Equals("pdf") && !splitedPdfName[splitedPdfName.Length - 1].Equals("PDF"))
+                        {
+                            pdfName = splitedPdfName[0] + ".pdf";
+                        }
 
                         PdfDocument inputDocument = PdfReader.Open(path + pdfName, PdfDocumentOpenMode.Import);
                         foreach (PdfPage page in inputDocument.Pages)
