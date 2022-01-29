@@ -19,7 +19,7 @@ namespace BPOBackend
         public List<String> GetUrls()
         {
             List<String> result = new List<String>();
-            using (var connection = GetConnection())
+            using (var connection = ConnectionDao.Instance.GetConnection())
             {
                 connection.Open();
                 NpgsqlCommand command = new NpgsqlCommand("get_LabelStorageUrls", connection);
@@ -33,9 +33,7 @@ namespace BPOBackend
             }
             return result;
         }
-        private static NpgsqlConnection GetConnection()
-        {
-            return new NpgsqlConnection("Server=localhost;Port=5432;Database=newdb;User Id=postgres;Password=Pass!234");
-        }
+
+
     }
 }

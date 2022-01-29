@@ -21,28 +21,6 @@ namespace BPOBackend
                 return instance ?? new LabelStorageUrlsBl();
             }
         }
-        public async Task DownloadFileAsync(HttpClient httpClient, String link)
-        {
-            try
-            {
-                String[] splitedLink = link.Split('/');
-                //var fileName = Guid.NewGuid().ToString(); // code to generate unique fileName;
-                String filePath = Path.Combine("D:\\cj\\Elmo\\downloads", splitedLink[splitedLink.Length - 1]);
-                if (File.Exists(filePath)) return;
-                var response = await httpClient.GetAsync(link);
-                response.EnsureSuccessStatusCode();
-                using (var contentStream = await response.Content.ReadAsStreamAsync())
-                using (var fileStream = new FileStream(filePath, FileMode.Create,
-                    FileAccess.Write, FileShare.None, 32768, FileOptions.Asynchronous))
-                {
-                    await contentStream.CopyToAsync(fileStream);
-                }
-            }
-            catch(Exception ex)
-            {
-
-            }
-        }
 
         public List<String> GetUrls()
         {
@@ -56,7 +34,7 @@ namespace BPOBackend
                 {
                     var block = new ActionBlock<String>(async link =>
                     {
-                        await LabelStorageUrlsBl.Instance.DownloadFileAsync(httpClient, link);
+                        await DownloadHelper.DownloadFileAsync(httpClient, link);
                     }, new ExecutionDataflowBlockOptions()
                     {
                         MaxDegreeOfParallelism = 10
@@ -132,6 +110,10 @@ namespace BPOBackend
         {
             IConfiguration configuration = SetConfig();
             return configuration["Path"];
+        }
+        public void MergePdfGroupByTrackingNumber()
+        {
+
         }
     }
 }
