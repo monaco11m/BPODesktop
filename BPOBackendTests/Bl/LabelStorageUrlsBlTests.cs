@@ -26,7 +26,7 @@ namespace BPOBackend.Tests
         {
             List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
 
-            await DownloadHelper.DownloadListAsync(list,"");
+            await DownloadHelper.DownloadListAsync(list, "");
             Assert.True(true, "This test needs an implementation");
         }
 
@@ -40,7 +40,7 @@ namespace BPOBackend.Tests
                 "6bf1a520-5b28-435e-a909-df497ba7e703.pdf"
             };
 
-            LabelStorageUrlsBl.Instance.MergePdf(list,"Test.pdf");
+            LabelStorageUrlsBl.Instance.MergePdf(list, "Test.pdf");
             Assert.NotNull(list);
         }
         [Fact()]
@@ -48,13 +48,23 @@ namespace BPOBackend.Tests
         {
             var sw = new Stopwatch();
             sw.Start();
-
-            String fileName = "D:\\cj\\Elmo\\downloads\\mergedFile.pdf";
+            String path = "D:\\zip\\";
 
             List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
 
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list, LabelStorageUrlsBl.Instance.GetPathFromAppSetting());
-            LabelStorageUrlsBl.Instance.MergePdf(list.Select(x=>x.Url).ToList(), fileName, true);
+            await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
+            List<String> filesToZip = new List<String>();
+            while (list!=null&&list.Count > 0)
+            {
+                List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == list[0].BatchNumber).ToList();
+
+                String mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString();
+                filesToZip.Add(mergedFileName);
+                LabelStorageUrlsBl.Instance.MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
+
+                list.RemoveAll(x => x.BatchNumber == list[0].BatchNumber);
+            }
+
             long ms = sw.ElapsedMilliseconds;
             sw.Stop();
             Assert.True(ms > 0);
@@ -74,6 +84,17 @@ namespace BPOBackend.Tests
         {
             List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
             Assert.NotNull(list);
+        }
+
+        [Fact()]
+        public async Task ZipFilesTestAsync()
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            await LabelStorageUrlsBl.Instance.DownloadZip("D:\\zip\\DMZ.zip","",0);
+            long ms = sw.ElapsedMilliseconds;
+            sw.Stop();
+            Assert.True(ms > 0);
         }
     }
 }

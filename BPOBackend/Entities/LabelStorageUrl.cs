@@ -11,5 +11,6 @@ namespace BPOBackend
         public String Url { get; set; }
         public String TrackingNumber { get; set; }
         public String Format { get; set; }
+        public Int64 BatchNumber { get; set; }
     }
 }

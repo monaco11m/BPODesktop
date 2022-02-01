@@ -51,6 +51,7 @@ namespace BPOBackend
                         Url = reader["url"].ToString(),
                         TrackingNumber= reader["trackingNumber"].ToString(),
                         Format= reader["format"].ToString(),
+                        BatchNumber= Convert.ToInt64(reader["batchNumber"]),
                     });
                 }
             }

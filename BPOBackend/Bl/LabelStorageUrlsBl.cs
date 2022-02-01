@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Ionic.Zip;
+using Microsoft.Extensions.Configuration;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
@@ -67,9 +68,7 @@ namespace BPOBackend
         {
             try
             {
-                String[] fileNameSplited = fileName.Split('\\');
-                String onlyName = fileNameSplited[fileNameSplited.Length - 1];
-                String path = fileName.Substring(0, fileName.Length - onlyName.Length);
+                String path = RemoveFileName(fileName);
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 PdfDocument outputDocument = new PdfDocument
                 {
@@ -123,9 +122,43 @@ namespace BPOBackend
             IConfiguration configuration = SetConfig();
             return configuration["Path"];
         }
-        public void MergePdfGroupByTrackingNumber()
+        public async Task DownloadZip(String zipFilename,String userId,Int32 groupId)
         {
+            try
+            {
+                List<String> filesToZip = new List<String>();
+                String path = RemoveFileName(zipFilename);
+                List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters(userId, groupId);
 
+                await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
+                
+                while (list != null && list.Count > 0)
+                {
+                    List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == list[0].BatchNumber).ToList();
+
+                    String mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString()+".pdf";
+                    filesToZip.Add(mergedFileName);
+                    LabelStorageUrlsBl.Instance.MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
+
+                    list.RemoveAll(x => x.BatchNumber == list[0].BatchNumber);
+                }
+
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.AddFiles(filesToZip, false,"");
+                    zip.Save(zipFilename);
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        private String RemoveFileName(String fileNameWithPath)
+        {
+            String[] fileNameSplited = fileNameWithPath.Split('\\');
+            String onlyName = fileNameSplited[fileNameSplited.Length - 1];
+            return fileNameWithPath.Substring(0, fileNameWithPath.Length - onlyName.Length);
         }
     }
 }
