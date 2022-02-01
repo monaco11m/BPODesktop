@@ -50,7 +50,38 @@ from "Transactions" t
 group by t."ShipmentGroupId"
 limit 100
 
-
-
 -- AutomateId = GroupId (web)
 --ShipmentGroupId = BatchNumber (bd)
+
+--31/01/2022
+select *
+from "AutomateLabels" u
+where u."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' and u."ScheduledTime">='2022-01-11'  and u."AutomateId"=55
+order by u."AutomateId" asc, u."BatchNumber";
+
+select t."ShipmentGroupId",t."TrackingNumber",*
+from "Transactions" t
+where t."ShipmentGroupId"='1158' and t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925'
+
+select l."Url",l."TrackingNumber",l."Format",t."ShipmentGroupId"
+from "LabelStorageUrls" l 
+join "Transactions" t
+on l."TrackingNumber"=t."TrackingNumber"
+and l."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+and t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+and t."ShipmentGroupId"=1158;
+
+select l."Url",l."TrackingNumber",l."Format",t."ShipmentGroupId"
+from "AutomateLabels" u
+join "Transactions" t
+on u."BatchNumber"=t."ShipmentGroupId"
+and u."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+and t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+--and t."ShipmentGroupId"=1158
+join "LabelStorageUrls" l 
+on l."TrackingNumber"=t."TrackingNumber"
+and l."UserId"='fe69add2-2149-44dc-9415-cdd640b36925'
+where u."ScheduledTime">='2022-01-11'  and u."AutomateId"=55
+order by u."AutomateId" asc, u."BatchNumber";
+
+

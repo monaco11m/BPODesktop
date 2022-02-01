@@ -6,7 +6,8 @@ begin
 return query
 select distinct (a."AutomateId") as AutomateId
 from "AutomateLabels" a
-where a."UserId"=userId and a."CreatedDate" between startDate and endDate;
+where a."UserId"=userId and a."CreatedDate" >= startDate
+order by AutomateId;
 end
 $$
 language plpgsql

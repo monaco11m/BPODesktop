@@ -8,6 +8,7 @@ using System.Threading.Tasks.Dataflow;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
 
 namespace BPOBackend.Tests
 {
@@ -51,12 +52,15 @@ namespace BPOBackend.Tests
             String fileName = "D:\\cj\\Elmo\\downloads\\mergedFile.pdf";
 
             List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+
             await LabelStorageUrlsBl.Instance.DownloadListAsync(list, LabelStorageUrlsBl.Instance.GetPathFromAppSetting());
             LabelStorageUrlsBl.Instance.MergePdf(list.Select(x=>x.Url).ToList(), fileName, true);
             long ms = sw.ElapsedMilliseconds;
             sw.Stop();
             Assert.True(ms > 0);
         }
+
+        
 
         [Fact()]
         public void GetPathFromAppSettingTest()

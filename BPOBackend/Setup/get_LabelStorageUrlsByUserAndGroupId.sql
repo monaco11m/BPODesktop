@@ -1,23 +1,20 @@
 create or replace function get_LabelStorageUrlsByUserAndGroupId(userId text,groupId integer)
-returns table(url text,trackingNumber text,format text)
+returns table(url text,trackingNumber text,format text,shipmentGroupId bigint)
 as
 $$
 begin
 return query
-select l."Url",l."TrackingNumber",l."Format"
-from "LabelStorageUrls" l 
-where l."Format"='PNG'
---where l."UserId"='fe69add2-2149-44dc-9415-cdd640b36925';
-limit 5000; 
-
-/*select l."Url",l."TrackingNumber",l."Format"
-from "LabelStorageUrls" l 
+select l."Url",l."TrackingNumber",l."Format",t."ShipmentGroupId"
+from "AutomateLabels" u
 join "Transactions" t
+on u."BatchNumber"=t."ShipmentGroupId"
+and u."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+and t."UserId"='fe69add2-2149-44dc-9415-cdd640b36925' 
+join "LabelStorageUrls" l 
 on l."TrackingNumber"=t."TrackingNumber"
-and l."UserId"=userId 
-and t."UserId"=userId 
-and t."ShipmentGroupId"=groupId;
-*/
+and l."UserId"='fe69add2-2149-44dc-9415-cdd640b36925'
+where u."ScheduledTime">='2022-01-11'  and u."AutomateId"=55
+order by u."AutomateId" asc, u."BatchNumber";
 end
 $$
 language plpgsql
