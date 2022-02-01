@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,7 +34,7 @@ namespace BPOBackend
             }
             return result;
         }
-        public List<LabelStorageUrl> GetUrlsByParameters(String userId,Int32 groupId)
+        public List<LabelStorageUrl> GetUrlsByParameters(String userId,Int32 groupId,DateTime startDate)
         {
             List<LabelStorageUrl> result = new List<LabelStorageUrl>();
             using (var connection = ConnectionDao.Instance.GetConnection())
@@ -42,6 +43,7 @@ namespace BPOBackend
                 NpgsqlCommand command = new NpgsqlCommand("get_LabelStorageUrlsByUserAndGroupId", connection);
                 command.Parameters.AddWithValue(new NpgsqlParameter("userId", DbType.String)).Value = userId;
                 command.Parameters.AddWithValue(new NpgsqlParameter("groupId", DbType.Int32)).Value = groupId;
+                command.Parameters.AddWithValue(new NpgsqlParameter("startDate", NpgsqlDbType.Date)).Value = new NpgsqlDate(startDate);
                 command.CommandType = CommandType.StoredProcedure;
                 var reader = command.ExecuteReader();
                 while (reader.Read())

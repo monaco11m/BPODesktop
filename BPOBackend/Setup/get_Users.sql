@@ -6,7 +6,8 @@ begin
 return query
 select u."Id",u."UserName"
 from "AspNetUsers" u 
-where u.is_active=true;
+where u.is_active=true
+order by u."UserName";
 end
 $$
 language plpgsql

@@ -136,7 +136,7 @@ namespace BPODesktop
             // 
             // saveFileDialog
             // 
-            this.saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            this.saveFileDialog.Filter = "ZIP Files (*.zip)|*.zip";
             // 
             // Form1
             // 

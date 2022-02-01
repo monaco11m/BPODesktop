@@ -50,7 +50,7 @@ namespace BPOBackend.Tests
             sw.Start();
             String path = "D:\\zip\\";
 
-            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0, new DateTime());
 
             await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
             List<String> filesToZip = new List<String>();
@@ -70,19 +70,18 @@ namespace BPOBackend.Tests
             Assert.True(ms > 0);
         }
 
-        
-
         [Fact()]
         public void GetPathFromAppSettingTest()
         {
             String result = LabelStorageUrlsBl.Instance.GetPathFromAppSetting();
+            result = System.IO.Path.GetTempPath();
             Assert.NotNull(result);
         }
 
         [Fact()]
         public void GetUrlsByParametersTest()
         {
-            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
+            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0, new DateTime());
             Assert.NotNull(list);
         }
 
@@ -91,7 +90,7 @@ namespace BPOBackend.Tests
         {
             var sw = new Stopwatch();
             sw.Start();
-            await LabelStorageUrlsBl.Instance.DownloadZip("D:\\zip\\DMZ.zip","",0);
+            await LabelStorageUrlsBl.Instance.DownloadZip("D:\\zip\\DMZ.zip","",0,new DateTime());
             long ms = sw.ElapsedMilliseconds;
             sw.Stop();
             Assert.True(ms > 0);

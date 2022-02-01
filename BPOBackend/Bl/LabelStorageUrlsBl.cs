@@ -28,9 +28,9 @@ namespace BPOBackend
         {
             return LabelStorageUrlsDao.Instance.GetUrls();
         }
-        public List<LabelStorageUrl> GetUrlsByParameters(String userId, Int32 groupId)
+        public List<LabelStorageUrl> GetUrlsByParameters(String userId, Int32 groupId, DateTime startDate)
         {
-            return LabelStorageUrlsDao.Instance.GetUrlsByParameters(userId,groupId);
+            return LabelStorageUrlsDao.Instance.GetUrlsByParameters(userId,groupId, startDate);
         }
         public async Task DownloadListAsync(List<LabelStorageUrl> list, String path)
         {
@@ -96,6 +96,7 @@ namespace BPOBackend
                         {
                             outputDocument.AddPage(page);
                         }
+                        File.Delete(path + pdfName);
                     }
                     catch (Exception ex)
                     {
@@ -122,31 +123,33 @@ namespace BPOBackend
             IConfiguration configuration = SetConfig();
             return configuration["Path"];
         }
-        public async Task DownloadZip(String zipFilename,String userId,Int32 groupId)
+        public async Task DownloadZip(String zipFilename,String userId,Int32 groupId,DateTime startDate)
         {
             try
             {
                 List<String> filesToZip = new List<String>();
-                String path = RemoveFileName(zipFilename);
-                List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters(userId, groupId);
+                String path = Path.GetTempPath();
+                List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters(userId, groupId, startDate);
 
                 await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
                 
                 while (list != null && list.Count > 0)
                 {
-                    List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == list[0].BatchNumber).ToList();
+                    Int64 currentBatchNumber = list[0].BatchNumber;
+                    List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == currentBatchNumber).ToList();
 
                     String mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString()+".pdf";
                     filesToZip.Add(mergedFileName);
                     LabelStorageUrlsBl.Instance.MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
 
-                    list.RemoveAll(x => x.BatchNumber == list[0].BatchNumber);
+                    list.RemoveAll(x => x.BatchNumber == currentBatchNumber);
                 }
 
                 using (ZipFile zip = new ZipFile())
                 {
                     zip.AddFiles(filesToZip, false,"");
                     zip.Save(zipFilename);
+                    DeleteFiles(filesToZip);
                 }
             }
             catch(Exception ex)
@@ -159,6 +162,11 @@ namespace BPOBackend
             String[] fileNameSplited = fileNameWithPath.Split('\\');
             String onlyName = fileNameSplited[fileNameSplited.Length - 1];
             return fileNameWithPath.Substring(0, fileNameWithPath.Length - onlyName.Length);
+        }
+        private void DeleteFiles(List<String> list)
+        {
+            foreach(String file in list)
+                File.Delete(file);
         }
     }
 }

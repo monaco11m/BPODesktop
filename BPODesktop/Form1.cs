@@ -22,15 +22,20 @@ namespace BPODesktop
             ddlUser.ValueMember ="Id";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(Object sender, EventArgs e)
         {
             ShowDialogToSaveFile();
         }
-        private async Task DownloadAndMergeAsync(String fileName)
+        private async Task DownloadZip(String fileName)
         {
-            List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0);
-            await LabelStorageUrlsBl.Instance.DownloadListAsync(list, LabelStorageUrlsBl.Instance.GetPathFromAppSetting());
-            LabelStorageUrlsBl.Instance.MergePdf(list.Select(x => x.Url).ToList(), fileName, true);
+            try
+            {
+                await LabelStorageUrlsBl.Instance.DownloadZip(fileName, (String)ddlUser.SelectedValue, Convert.ToInt32(ddlGroupId.SelectedValue), dtStartDate.Value);
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         private void dtStartDate_ValueChanged(object sender, EventArgs e)
@@ -43,7 +48,6 @@ namespace BPODesktop
         }
         private void LoadGroupIds()
         {
-            DateTime strStartDate = dtStartDate.Value;
             List<AutomateLabel> result = AutomateLabelsBl.Instance.GetIdsByUserIdAndDate((String)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
             ddlGroupId.DataSource = result;
             ddlGroupId.DisplayMember = "Id";
@@ -53,7 +57,7 @@ namespace BPODesktop
         {
             if(saveFileDialog.ShowDialog()== DialogResult.OK)
             {
-                DownloadAndMergeAsync(saveFileDialog.FileName);
+                DownloadZip(saveFileDialog.FileName);
             }
         }
         

@@ -17,7 +17,7 @@ namespace BPOBackend
             }
         }
 
-        public void SaveImageAsPdf(String imageFileName, String pdfFileName, int width = 600, bool deleteImage = false)
+        public void SaveImageAsPdf(String imageFileName, String pdfFileName, int width = 600)
         {
             try
             {
@@ -40,8 +40,7 @@ namespace BPOBackend
                     document.Save(pdfFileName);
                 }
 
-                if (deleteImage)
-                    File.Delete(imageFileName);
+                File.Delete(imageFileName);
             }catch(Exception ex)
             {
 
