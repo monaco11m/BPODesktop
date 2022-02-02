@@ -36,7 +36,7 @@ namespace BPODesktop
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.dtStartDate = new System.Windows.Forms.DateTimePicker();
             this.dtEndDate = new System.Windows.Forms.DateTimePicker();
             this.ddlGroupId = new System.Windows.Forms.ComboBox();
@@ -92,16 +92,16 @@ namespace BPODesktop
             this.label4.TabIndex = 4;
             this.label4.Text = "Group Id";
             // 
-            // button1
+            // btnDownload
             // 
-            this.button1.Location = new System.Drawing.Point(265, 226);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(70, 20);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Download";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnDownload.Location = new System.Drawing.Point(265, 226);
+            this.btnDownload.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(95, 26);
+            this.btnDownload.TabIndex = 5;
+            this.btnDownload.Text = "Download";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.button1_Click);
             // 
             // dtStartDate
             // 
@@ -146,7 +146,7 @@ namespace BPODesktop
             this.Controls.Add(this.ddlGroupId);
             this.Controls.Add(this.dtEndDate);
             this.Controls.Add(this.dtStartDate);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -167,7 +167,7 @@ namespace BPODesktop
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.DateTimePicker dtStartDate;
         private DateTimePicker dtEndDate;
         private ComboBox ddlGroupId;

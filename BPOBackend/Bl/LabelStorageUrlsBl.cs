@@ -1,5 +1,4 @@
 ﻿using Ionic.Zip;
-using Microsoft.Extensions.Configuration;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
@@ -24,15 +23,15 @@ namespace BPOBackend
             }
         }
 
-        public List<String> GetUrls()
+        public List<string> GetUrls()
         {
             return LabelStorageUrlsDao.Instance.GetUrls();
         }
-        public List<LabelStorageUrl> GetUrlsByParameters(String userId, Int32 groupId, DateTime startDate)
+        public List<LabelStorageUrl> GetUrlsByParameters(string userId, int groupId, DateTime startDate)
         {
             return LabelStorageUrlsDao.Instance.GetUrlsByParameters(userId,groupId, startDate);
         }
-        public async Task DownloadListAsync(List<LabelStorageUrl> list, String path)
+        public async Task DownloadListAsync(List<LabelStorageUrl> list, string path)
         {
             try
             {
@@ -42,8 +41,8 @@ namespace BPOBackend
                     {
                         await DownloadHelper.DownloadFileAsync(httpClient, path, label.Url);
                         if (label.Format.Equals("PNG")) {
-                            String[] splitedFileUrl = label.Url.Split('/');
-                            String[] splitedFileName = splitedFileUrl[splitedFileUrl.Length-1].Split('.');
+                            string[] splitedFileUrl = label.Url.Split('/');
+                            string[] splitedFileName = splitedFileUrl[splitedFileUrl.Length-1].Split('.');
 
                             PdfHelper.Instance.SaveImageAsPdf(path+splitedFileUrl[splitedFileUrl.Length - 1], path + splitedFileName[0]+".pdf");
                         }
@@ -64,28 +63,28 @@ namespace BPOBackend
 
             }
         }
-        public void MergePdf(List<String> list,String fileName,Boolean splitPdfName=false)
+        public void MergePdf(List<string> list,string fileName,bool splitPdfName=false)
         {
             try
             {
-                String path = RemoveFileName(fileName);
+                string path = RemoveFileName(fileName);
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 PdfDocument outputDocument = new PdfDocument
                 {
                     PageLayout = PdfPageLayout.SinglePage
                 };
 
-                foreach (String pdf in list)
+                foreach (string pdf in list)
                 {
                     try
                     {
-                        String pdfName = pdf;
+                        string pdfName = pdf;
                         if (splitPdfName)
                         {
-                            String[] pdfNameSplited = pdf.Split('/');
+                            string[] pdfNameSplited = pdf.Split('/');
                             pdfName = pdfNameSplited[pdfNameSplited.Length - 1];
                         }
-                        String[] splitedPdfName = pdfName.Split('.');
+                        string[] splitedPdfName = pdfName.Split('.');
                         if (!splitedPdfName[splitedPdfName.Length - 1].Equals("pdf") && !splitedPdfName[splitedPdfName.Length - 1].Equals("PDF"))
                         {
                             pdfName = splitedPdfName[0] + ".pdf";
@@ -111,36 +110,25 @@ namespace BPOBackend
             }
 
         }
-        private IConfiguration SetConfig()
+        public async Task<bool> DownloadZip(string zipFilename,string userId,int groupId,DateTime startDate)
         {
-            return new ConfigurationBuilder()
-                    .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile("appsettings.json", false, true)
-                    .Build();
-        }
-        public String GetPathFromAppSetting()
-        {
-            IConfiguration configuration = SetConfig();
-            return configuration["Path"];
-        }
-        public async Task DownloadZip(String zipFilename,String userId,Int32 groupId,DateTime startDate)
-        {
+            bool result = false;
             try
             {
-                List<String> filesToZip = new List<String>();
-                String path = Path.GetTempPath();
-                List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters(userId, groupId, startDate);
+                List<string> filesToZip = new List<String>();
+                string path = Path.GetTempPath();
+                List<LabelStorageUrl> list = GetUrlsByParameters(userId, groupId, startDate);
 
-                await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
+                await DownloadListAsync(list, path);
                 
                 while (list != null && list.Count > 0)
                 {
-                    Int64 currentBatchNumber = list[0].BatchNumber;
+                    long currentBatchNumber = list[0].BatchNumber;
                     List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == currentBatchNumber).ToList();
 
-                    String mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString()+".pdf";
+                    string mergedFileName = path + string.Format("Label_{0}_{1}_{2}", list[0].BatchNumber, list[0].ItemSku.WithMaxLength(20), list[0].ItemQuantity) + ".pdf";
                     filesToZip.Add(mergedFileName);
-                    LabelStorageUrlsBl.Instance.MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
+                    MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
 
                     list.RemoveAll(x => x.BatchNumber == currentBatchNumber);
                 }
@@ -151,21 +139,23 @@ namespace BPOBackend
                     zip.Save(zipFilename);
                     DeleteFiles(filesToZip);
                 }
+                result = true;
             }
             catch(Exception ex)
             {
-
+                result = false;
             }
+            return result;
         }
-        private String RemoveFileName(String fileNameWithPath)
+        private string RemoveFileName(string fileNameWithPath)
         {
-            String[] fileNameSplited = fileNameWithPath.Split('\\');
-            String onlyName = fileNameSplited[fileNameSplited.Length - 1];
+            string[] fileNameSplited = fileNameWithPath.Split('\\');
+            string onlyName = fileNameSplited[fileNameSplited.Length - 1];
             return fileNameWithPath.Substring(0, fileNameWithPath.Length - onlyName.Length);
         }
-        private void DeleteFiles(List<String> list)
+        private void DeleteFiles(List<string> list)
         {
-            foreach(String file in list)
+            foreach(string file in list)
                 File.Delete(file);
         }
     }

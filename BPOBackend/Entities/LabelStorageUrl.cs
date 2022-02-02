@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BPOBackend
 {
     public class LabelStorageUrl
     {
-        public String Url { get; set; }
-        public String TrackingNumber { get; set; }
-        public String Format { get; set; }
-        public Int64 BatchNumber { get; set; }
+        public string Url { get; set; }
+        public string TrackingNumber { get; set; }
+        public string Format { get; set; }
+        public long BatchNumber { get; set; }
+        public int ItemQuantity { get; set; }
+        public string ItemSku { get; set; }
     }
 }

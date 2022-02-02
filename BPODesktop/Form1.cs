@@ -22,19 +22,19 @@ namespace BPODesktop
             ddlUser.ValueMember ="Id";
         }
 
-        private void button1_Click(Object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            ShowDialogToSaveFile();
+            ShowDialogToSaveFileAsync();
         }
-        private async Task DownloadZip(String fileName)
+        private async Task<bool> DownloadZip(string fileName)
         {
             try
             {
-                await LabelStorageUrlsBl.Instance.DownloadZip(fileName, (String)ddlUser.SelectedValue, Convert.ToInt32(ddlGroupId.SelectedValue), dtStartDate.Value);
+                return await LabelStorageUrlsBl.Instance.DownloadZip(fileName, (string)ddlUser.SelectedValue, Convert.ToInt32(ddlGroupId.SelectedValue), dtStartDate.Value);
             }
             catch(Exception ex)
             {
-
+                return false;
             }
         }
 
@@ -48,16 +48,24 @@ namespace BPODesktop
         }
         private void LoadGroupIds()
         {
-            List<AutomateLabel> result = AutomateLabelsBl.Instance.GetIdsByUserIdAndDate((String)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
+            List<AutomateLabel> result = AutomateLabelsBl.Instance.GetIdsByUserIdAndDate((string)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
             ddlGroupId.DataSource = result;
             ddlGroupId.DisplayMember = "Id";
             ddlGroupId.ValueMember = "Id";
         }
-        private void ShowDialogToSaveFile()
+        private async Task ShowDialogToSaveFileAsync()
         {
-            if(saveFileDialog.ShowDialog()== DialogResult.OK)
+            saveFileDialog.FileName= "Label_Group_" + ddlGroupId.SelectedValue.ToString() + ".zip";
+            if (saveFileDialog.ShowDialog()== DialogResult.OK)
             {
-                DownloadZip(saveFileDialog.FileName);
+                btnDownload.Enabled = false;
+                btnDownload.Text = "Downloading...";
+                bool result=await DownloadZip(saveFileDialog.FileName);
+                if (result)
+                    MessageBox.Show("Success");
+                else
+                    MessageBox.Show("Error");
+                btnDownload.Enabled = true;
             }
         }
         

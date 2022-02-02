@@ -1,10 +1,10 @@
 create or replace function get_LabelStorageUrlsByUserAndGroupId(userId text,groupId integer,startDate date)
-returns table(url text,trackingNumber text,format text,batchNumber bigint)
+returns table(url text,trackingNumber text,format text,batchNumber bigint,itemQuantity integer,ItemSku text)
 as
 $$
 begin
 return query
-select l."Url",l."TrackingNumber",l."Format",u."BatchNumber"
+select l."Url",l."TrackingNumber",l."Format",u."BatchNumber",u."ItemQuantity",u."ItemSku"
 from "AutomateLabels" u
 join "Transactions" t
 on u."BatchNumber"=t."ShipmentGroupId"
@@ -15,15 +15,16 @@ on l."TrackingNumber"=t."TrackingNumber"
 and l."UserId"=userId--'fe69add2-2149-44dc-9415-cdd640b36925'
 where u."ScheduledTime">=startDate--'2022-01-11'  
 and u."AutomateId"=groupId--55
-order by u."AutomateId" asc, u."BatchNumber";
+order by u."AutomateId" asc, u."BatchNumber"
+--limit 100
+;
 end
 $$
 language plpgsql
 
 --drop function get_LabelStorageUrlsByUserAndGroupId
 
---select get_LabelStorageUrlsByUserAndGroupId('fe69add2-2149-44dc-9415-cdd640b36925',52)
---select get_LabelStorageUrlsByUserAndGroupId('bf281bd3-c935-4b99-bb1a-a314cf341261',52)
+--select get_LabelStorageUrlsByUserAndGroupId('fe69add2-2149-44dc-9415-cdd640b36925',55,'2022-01-11')
 
 --select l."Url",l."TrackingNumber",l."Format",u."BatchNumber"
 --from "AutomateLabels" u

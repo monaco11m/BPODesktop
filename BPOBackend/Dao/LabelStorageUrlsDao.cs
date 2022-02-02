@@ -3,7 +3,6 @@ using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace BPOBackend
 {
@@ -17,9 +16,9 @@ namespace BPOBackend
                 return instance ?? new LabelStorageUrlsDao();
             }
         }
-        public List<String> GetUrls()
+        public List<string> GetUrls()
         {
-            List<String> result = new List<String>();
+            List<string> result = new List<string>();
             using (var connection = ConnectionDao.Instance.GetConnection())
             {
                 connection.Open();
@@ -34,7 +33,7 @@ namespace BPOBackend
             }
             return result;
         }
-        public List<LabelStorageUrl> GetUrlsByParameters(String userId,Int32 groupId,DateTime startDate)
+        public List<LabelStorageUrl> GetUrlsByParameters(string userId,int groupId,DateTime startDate)
         {
             List<LabelStorageUrl> result = new List<LabelStorageUrl>();
             using (var connection = ConnectionDao.Instance.GetConnection())
@@ -54,6 +53,8 @@ namespace BPOBackend
                         TrackingNumber= reader["trackingNumber"].ToString(),
                         Format= reader["format"].ToString(),
                         BatchNumber= Convert.ToInt64(reader["batchNumber"]),
+                        ItemQuantity= Convert.ToInt32(reader["itemQuantity"]),
+                        ItemSku= reader["itemSku"].ToString(),
                     });
                 }
             }
