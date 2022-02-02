@@ -66,6 +66,7 @@ namespace BPODesktop
                 else
                     MessageBox.Show("Error");
                 btnDownload.Enabled = true;
+                btnDownload.Text = "Download";
             }
         }
         
