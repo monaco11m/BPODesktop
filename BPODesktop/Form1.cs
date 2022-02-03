@@ -1,12 +1,6 @@
 ﻿using BPOBackend;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,7 +11,7 @@ namespace BPODesktop
         public Form1()
         {
             InitializeComponent();
-            ddlUser.DataSource = AspNetUserBl.Instance.GetAspNetUser();
+            ddlUser.DataSource = AppUserAutoBatchingBl.Instance.GetAutoBatchingUsers();
             ddlUser.DisplayMember="UserName";
             ddlUser.ValueMember ="Id";
         }
@@ -48,10 +42,10 @@ namespace BPODesktop
         }
         private void LoadGroupIds()
         {
-            List<AutomateLabel> result = AutomateLabelsBl.Instance.GetIdsByUserIdAndDate((string)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
+            List<AutomateLabel> result = AutomateLabelsBl.Instance.GetAutomateLabel((string)ddlUser.SelectedValue, dtStartDate.Value, dtEndDate.Value);
             ddlGroupId.DataSource = result;
-            ddlGroupId.DisplayMember = "Id";
-            ddlGroupId.ValueMember = "Id";
+            ddlGroupId.DisplayMember = "AutomateId";
+            ddlGroupId.ValueMember = "AutomateId";
         }
         private async Task ShowDialogToSaveFileAsync()
         {
