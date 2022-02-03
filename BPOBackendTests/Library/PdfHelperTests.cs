@@ -11,7 +11,7 @@ namespace BPOBackend.Tests
         [Fact()]
         public void SaveImageAsPdfTest()
         {
-            String path = LabelStorageUrlsBl.Instance.GetPathFromAppSetting();
+            String path = "";
             PdfHelper.Instance.SaveImageAsPdf(path + "test.png", path + "converted.pdf");
 
             Assert.True(true, "This test needs an implementation");

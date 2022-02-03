@@ -71,14 +71,6 @@ namespace BPOBackend.Tests
         }
 
         [Fact()]
-        public void GetPathFromAppSettingTest()
-        {
-            String result = LabelStorageUrlsBl.Instance.GetPathFromAppSetting();
-            result = System.IO.Path.GetTempPath();
-            Assert.NotNull(result);
-        }
-
-        [Fact()]
         public void GetUrlsByParametersTest()
         {
             List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0, new DateTime());
