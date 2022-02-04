@@ -1,10 +1,6 @@
 ﻿using Npgsql;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BPOBackend
 {
@@ -24,8 +20,10 @@ namespace BPOBackend
             using (var connection = ConnectionDao.Instance.GetConnection())
             {
                 connection.Open();
-                NpgsqlCommand command = new NpgsqlCommand("get_Users", connection);
-                command.CommandType = CommandType.StoredProcedure;
+                NpgsqlCommand command = new NpgsqlCommand("get_Users", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {

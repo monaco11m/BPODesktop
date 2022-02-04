@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BPOBackend
 {
@@ -17,11 +14,11 @@ namespace BPOBackend
                 return instance ?? new AutomateLabelsBl();
             }
         }
-        public List<AutomateLabel> GetIdsByUserIdAndDate(String userId, DateTime startDate, DateTime endDate)
+        public List<AutomateLabel> GetIdsByUserIdAndDate(string userId, DateTime startDate, DateTime endDate)
         {
             return AutomateLabelsDao.Instance.GetIdsByUserIdAndDate(userId, startDate, endDate);
         }
-        public List<AutomateLabel> GetAutomateLabel(String userId, DateTime startDate, DateTime endDate)
+        public List<AutomateLabel> GetAutomateLabel(string userId, DateTime startDate, DateTime endDate)
         {
             try
             {

@@ -1,8 +1,4 @@
 ﻿using Xunit;
-using BPOBackend;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BPOBackend.Tests
 {

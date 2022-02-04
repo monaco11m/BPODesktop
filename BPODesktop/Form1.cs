@@ -24,7 +24,7 @@ namespace BPODesktop
         {
             try
             {
-                return await LabelStorageUrlsBl.Instance.DownloadZip(fileName, (string)ddlUser.SelectedValue, Convert.ToInt32(ddlGroupId.SelectedValue), dtStartDate.Value);
+                return await AutoBatchingUrlBl.Instance.DownloadZip(fileName, (string)ddlUser.SelectedValue, Convert.ToInt64(ddlGroupId.SelectedValue));
             }
             catch(Exception ex)
             {

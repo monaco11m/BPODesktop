@@ -1,5 +1,4 @@
-﻿
-namespace BPOBackend
+﻿namespace BPOBackend
 {
     public class LabelStorageUrl
     {

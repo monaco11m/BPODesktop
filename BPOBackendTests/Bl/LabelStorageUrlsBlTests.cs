@@ -1,14 +1,9 @@
-﻿using BPOBackend;
-using Xunit;
+﻿using Xunit;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net.Http;
-using System.Threading.Tasks.Dataflow;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Linq;
-using System.IO;
 
 namespace BPOBackend.Tests
 {
@@ -17,14 +12,14 @@ namespace BPOBackend.Tests
         [Fact()]
         public void GetUrlsTest()
         {
-            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
+            List<string> list = LabelStorageUrlsBl.Instance.GetUrls();
             Assert.NotNull(list);
         }
 
         [Fact()]
         public async Task DownloadFileAsyncTestAsync()
         {
-            List<String> list = LabelStorageUrlsBl.Instance.GetUrls();
+            List<string> list = LabelStorageUrlsBl.Instance.GetUrls();
 
             await DownloadHelper.DownloadListAsync(list, "");
             Assert.True(true, "This test needs an implementation");
@@ -33,7 +28,7 @@ namespace BPOBackend.Tests
         [Fact()]
         public void MergePdfTest()
         {
-            List<String> list = new List<String>
+            List<string> list = new List<string>
             {
                 "test.pdf",
                 "1afbd624-3015-40ab-b1f6-b3e6dbd512c7.pdf",
@@ -48,17 +43,17 @@ namespace BPOBackend.Tests
         {
             var sw = new Stopwatch();
             sw.Start();
-            String path = "D:\\zip\\";
+            string path = "D:\\zip\\";
 
             List<LabelStorageUrl> list = LabelStorageUrlsBl.Instance.GetUrlsByParameters("test", 0, new DateTime());
 
             await LabelStorageUrlsBl.Instance.DownloadListAsync(list, path);
-            List<String> filesToZip = new List<String>();
+            List<string> filesToZip = new List<string>();
             while (list!=null&&list.Count > 0)
             {
                 List<LabelStorageUrl> subList = list.Where(x => x.BatchNumber == list[0].BatchNumber).ToList();
 
-                String mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString();
+                string mergedFileName = path + "batchNumber_" + list[0].BatchNumber.ToString();
                 filesToZip.Add(mergedFileName);
                 LabelStorageUrlsBl.Instance.MergePdf(subList.Select(x => x.Url).ToList(), mergedFileName, true);
 

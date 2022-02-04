@@ -17,7 +17,7 @@ namespace BPOBackend
             }
         }
 
-        public void SaveImageAsPdf(String imageFileName, String pdfFileName, int width = 600)
+        public void SaveImageAsPdf(string imageFileName, string pdfFileName, int width = 600)
         {
             try
             {

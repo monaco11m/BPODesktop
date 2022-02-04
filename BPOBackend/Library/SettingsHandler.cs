@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BPOBackend
 {
@@ -17,7 +13,7 @@ namespace BPOBackend
                 return instance ?? new SettingsHandler();
             }
         }
-        public String GetFromAppSetting(string value)
+        public string GetFromAppSetting(string value)
         {
             IConfiguration configuration = SetConfig();
             return configuration[value];

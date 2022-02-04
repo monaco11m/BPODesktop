@@ -115,7 +115,7 @@ namespace BPOBackend
             bool result = false;
             try
             {
-                List<string> filesToZip = new List<String>();
+                List<string> filesToZip = new List<string>();
                 string path = Path.GetTempPath();
                 List<LabelStorageUrl> list = GetUrlsByParameters(userId, groupId, startDate);
 

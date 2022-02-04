@@ -1,8 +1,4 @@
 ﻿using Xunit;
-using BPOBackend;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BPOBackend.Tests
 {
@@ -11,7 +7,7 @@ namespace BPOBackend.Tests
         [Fact()]
         public void SaveImageAsPdfTest()
         {
-            String path = "";
+            string path = "";
             PdfHelper.Instance.SaveImageAsPdf(path + "test.png", path + "converted.pdf");
 
             Assert.True(true, "This test needs an implementation");

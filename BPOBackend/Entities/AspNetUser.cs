@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace BPOBackend
+﻿namespace BPOBackend
 {
     public class AspNetUser
     {
-        public String Id { get; set; }
-        public String UserName{ get; set; }
+        public string Id { get; set; }
+        public string UserName{ get; set; }
     }
 }
