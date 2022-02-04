@@ -153,7 +153,7 @@ namespace BPOBackend
             string onlyName = fileNameSplited[fileNameSplited.Length - 1];
             return fileNameWithPath.Substring(0, fileNameWithPath.Length - onlyName.Length);
         }
-        private void DeleteFiles(List<string> list)
+        public void DeleteFiles(List<string> list)
         {
             foreach(string file in list)
                 File.Delete(file);
