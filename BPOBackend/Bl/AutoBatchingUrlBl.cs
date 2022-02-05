@@ -26,7 +26,9 @@ namespace BPOBackend
             {
                 string webResult = WebRequestHandler.ApiGet(SettingsHandler.Instance.GetFromAppSetting("MainDomain") + "getUrlListAutoBatching?"+
                     string.Format("userId={0}&groupId={1}", userId, groupId));
-                return JsonConvert.DeserializeObject<List<AutoBatchingUrl>>(webResult);
+
+                AutoBatchingUrlResponse response= JsonConvert.DeserializeObject<AutoBatchingUrlResponse>(webResult);
+                return response != null ? response.AutoBatchingUrl : new List<AutoBatchingUrl>();
             }
             catch (Exception ex)
             {
@@ -66,7 +68,7 @@ namespace BPOBackend
                     var block = new ActionBlock<AutoBatchingUrl>(async autoBatchingUrl =>
                     {
                         await DownloadListAsync(autoBatchingUrl.UrlList, path);
-                        string mergedFileName = path + string.Format("Label_{0}_{1}_{2}", autoBatchingUrl.BatchNumber, autoBatchingUrl.AutoBatchDto.ItemSku.WithMaxLength(20), autoBatchingUrl.AutoBatchDto.Quantity) + ".pdf";
+                        string mergedFileName = path + autoBatchingUrl.LabelFileName;
                         string summaryFileName = string.Format("summary_{0}.pdf", autoBatchingUrl.BatchNumber);
                         PdfHelper.Instance.FileFromBase64(autoBatchingUrl.SummaryPage, path+ summaryFileName);
                         autoBatchingUrl.UrlList.Add("add/"+summaryFileName);
