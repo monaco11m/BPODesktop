@@ -67,6 +67,9 @@ namespace BPOBackend
                     {
                         await DownloadListAsync(autoBatchingUrl.UrlList, path);
                         string mergedFileName = path + string.Format("Label_{0}_{1}_{2}", autoBatchingUrl.BatchNumber, autoBatchingUrl.AutoBatchDto.ItemSku.WithMaxLength(20), autoBatchingUrl.AutoBatchDto.Quantity) + ".pdf";
+                        string summaryFileName = string.Format("summary_{0}.pdf", autoBatchingUrl.BatchNumber);
+                        PdfHelper.Instance.FileFromBase64(autoBatchingUrl.SummaryPage, path+ summaryFileName);
+                        autoBatchingUrl.UrlList.Add("add/"+summaryFileName);
                         filesToZip.Add(mergedFileName);
                         LabelStorageUrlsBl.Instance.MergePdf(autoBatchingUrl.UrlList, mergedFileName, true);
 

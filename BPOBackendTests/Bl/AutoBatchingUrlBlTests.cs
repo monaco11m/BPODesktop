@@ -19,7 +19,7 @@ namespace BPOBackend.Tests
         {
             var sw = new Stopwatch();
             sw.Start();
-            bool result= await AutoBatchingUrlBl.Instance.DownloadZip("D:\\zip\\DMZ.zip", "fe69add2-2149-44dc-9415-cdd640b36925", 55);
+            bool result= await AutoBatchingUrlBl.Instance.DownloadZip("D:\\zip\\withSummary3.zip", "fe69add2-2149-44dc-9415-cdd640b36925", 55);
             long ms = sw.ElapsedMilliseconds;
             sw.Stop();
             Assert.True(result&&ms > 0);

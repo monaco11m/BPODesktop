@@ -81,8 +81,7 @@ namespace BPOBackend
                         string pdfName = pdf;
                         if (splitPdfName)
                         {
-                            string[] pdfNameSplited = pdf.Split('/');
-                            pdfName = pdfNameSplited[pdfNameSplited.Length - 1];
+                            pdfName = pdf.Split('/').LastOrDefault();
                         }
                         string[] splitedPdfName = pdfName.Split('.');
                         if (!splitedPdfName[splitedPdfName.Length - 1].Equals("pdf") && !splitedPdfName[splitedPdfName.Length - 1].Equals("PDF"))

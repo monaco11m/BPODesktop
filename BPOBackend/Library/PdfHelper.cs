@@ -41,7 +41,19 @@ namespace BPOBackend
                 }
 
                 File.Delete(imageFileName);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        public void FileFromBase64(string yourBase64String,string filename)
+        {
+            try
+            {
+                File.WriteAllBytes(filename, Convert.FromBase64String(yourBase64String));
+            }
+            catch (Exception ex)
             {
 
             }
