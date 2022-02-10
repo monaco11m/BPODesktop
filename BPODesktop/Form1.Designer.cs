@@ -42,6 +42,7 @@ namespace BPODesktop
             this.ddlGroupId = new System.Windows.Forms.ComboBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.pbDownloading = new System.Windows.Forms.ProgressBar();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ddlUser
@@ -138,11 +139,20 @@ namespace BPODesktop
             this.pbDownloading.TabIndex = 9;
             this.pbDownloading.Visible = false;
             // 
+            // lblMessage
+            // 
+            this.lblMessage.AutoSize = true;
+            this.lblMessage.Location = new System.Drawing.Point(377, 338);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(0, 20);
+            this.lblMessage.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(455, 449);
+            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.pbDownloading);
             this.Controls.Add(this.ddlGroupId);
             this.Controls.Add(this.dtEndDate);
@@ -173,6 +183,7 @@ namespace BPODesktop
         private ComboBox ddlGroupId;
         private SaveFileDialog saveFileDialog;
         private ProgressBar pbDownloading;
+        private Label lblMessage;
     }
 }
 

@@ -44,10 +44,12 @@ namespace BPODesktop
             saveFileDialog.FileName = "Label_Group_" + ddlGroupId.SelectedValue.ToString() + ".zip";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                pbDownloading.Value = 0;
                 btnDownload.Enabled = false;
-                pbDownloading.Visible = true;
                 btnDownload.Text = "Downloading...";
-
+                btnDownload.Refresh();
+                pbDownloading.Visible = true;
+                pbDownloading.Refresh();
 
                 bool result = await DownloadAsync(saveFileDialog.FileName);
                 if (result)
@@ -58,6 +60,8 @@ namespace BPODesktop
                 btnDownload.Enabled = true;
                 pbDownloading.Visible = false;
                 btnDownload.Text = "Download";
+                lblMessage.Text = "";
+                lblMessage.Refresh();
             }
         }
         private async Task<bool> DownloadAsync(string ZipFileName)
@@ -66,6 +70,8 @@ namespace BPODesktop
             {
                 string path = Path.GetTempPath();
                 List<AutoBatchingUrl> list = AutoBatchingUrlBl.Instance.GetUrlListAutoBatching((string)ddlUser.SelectedValue, Convert.ToInt64(ddlGroupId.SelectedValue));
+                lblMessage.Text = "0/"+list.Count;
+                lblMessage.Refresh();
                 List<string> filesToZip = await PreparePdfsToZip(list, path);
 
                 using (ZipFile zip = new ZipFile())
@@ -106,7 +112,11 @@ namespace BPODesktop
                             pbDownloading.Value += 1;
                         }));
 
-
+                        lblMessage.Invoke(new Action(() =>
+                        {
+                            lblMessage.Text = pbDownloading.Value + "/" + list.Count;
+                            lblMessage.Refresh();
+                        }));
                     }, new ExecutionDataflowBlockOptions()
                     {
                         MaxDegreeOfParallelism = 10
