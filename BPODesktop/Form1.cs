@@ -18,8 +18,15 @@ namespace BPODesktop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ShowDialogToSaveFileAsync();
+            
+            ShowDialogToSaveFile();
         }
+
+        private void DownloadingProgressBar_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            btnDownload.Enabled = true;
+        }
+
         private async Task<bool> DownloadZip(string fileName)
         {
             try
@@ -47,22 +54,27 @@ namespace BPODesktop
             ddlGroupId.DisplayMember = "AutomateId";
             ddlGroupId.ValueMember = "AutomateId";
         }
-        private async Task ShowDialogToSaveFileAsync()
+        private void ShowDialogToSaveFile()
         {
-            saveFileDialog.FileName= "Label_Group_" + ddlGroupId.SelectedValue.ToString() + ".zip";
-            if (saveFileDialog.ShowDialog()== DialogResult.OK)
+            saveFileDialog.FileName = "Label_Group_" + ddlGroupId.SelectedValue.ToString() + ".zip";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 btnDownload.Enabled = false;
-                btnDownload.Text = "Downloading...";
-                bool result=await DownloadZip(saveFileDialog.FileName);
-                if (result)
-                    MessageBox.Show("Success");
-                else
-                    MessageBox.Show("Error");
-                btnDownload.Enabled = true;
-                btnDownload.Text = "Download";
+                //btnDownload.Text = "Downloading...";
+                //bool result=await DownloadZip(saveFileDialog.FileName);
+
+                DownloadingProgressBar downloadingProgressBar = new DownloadingProgressBar(saveFileDialog.FileName, (string)ddlUser.SelectedValue, Convert.ToInt64(ddlGroupId.SelectedValue));
+                downloadingProgressBar.FormClosed += DownloadingProgressBar_FormClosed;
+                downloadingProgressBar.Show();
+
+                //if (result)
+                //    MessageBox.Show("Success");
+                //else
+                //    MessageBox.Show("Error");
+                //btnDownload.Enabled = true;
+                //btnDownload.Text = "Download";
             }
         }
-        
+
     }
 }

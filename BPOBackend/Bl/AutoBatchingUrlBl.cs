@@ -58,7 +58,7 @@ namespace BPOBackend
             }
             return result;
         }
-        private async Task<List<string>> PreparePdfsToZip(List<AutoBatchingUrl> list, string path)
+        public async Task<List<string>> PreparePdfsToZip(List<AutoBatchingUrl> list, string path)
         {
             List<string> filesToZip = new List<string>();
             try
@@ -93,7 +93,7 @@ namespace BPOBackend
             }
             return filesToZip;
         }
-        private async Task DownloadListAsync(List<string> list, string path)
+        public async Task DownloadListAsync(List<string> list, string path)
         {
             try
             {
