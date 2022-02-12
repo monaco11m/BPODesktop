@@ -12,6 +12,8 @@ namespace BPODesktop
 {
     public partial class Form1 : Form
     {
+        private string userIdSelected;
+        private long groupIdSelected;
         public Form1()
         {
             InitializeComponent();
@@ -22,6 +24,8 @@ namespace BPODesktop
 
         private void button1_Click(object sender, EventArgs e)
         {
+            userIdSelected = (string)ddlUser.SelectedValue;
+            groupIdSelected = Convert.ToInt64(ddlGroupId.SelectedValue);
             ShowDialogToSaveFileAsync();
         }
         private void dtStartDate_ValueChanged(object sender, EventArgs e)
@@ -69,7 +73,7 @@ namespace BPODesktop
             try
             {
                 string path = Path.GetTempPath();
-                List<AutoBatchingUrl> list = AutoBatchingUrlBl.Instance.GetUrlListAutoBatching((string)ddlUser.SelectedValue, Convert.ToInt64(ddlGroupId.SelectedValue));
+                List<AutoBatchingUrl> list = AutoBatchingUrlBl.Instance.GetUrlListAutoBatching(userIdSelected, groupIdSelected);
                 lblMessage.Text = "0/"+list.Count;
                 lblMessage.Refresh();
                 List<string> filesToZip = await PreparePdfsToZip(list, path);
@@ -99,13 +103,32 @@ namespace BPODesktop
                 {
                     var block = new ActionBlock<AutoBatchingUrl>(async autoBatchingUrl =>
                     {
-                        await AutoBatchingUrlBl.Instance.DownloadListAsync(autoBatchingUrl.UrlList, path);
                         string mergedFileName = path + autoBatchingUrl.LabelFileName;
                         string summaryFileName = string.Format("summary_{0}.pdf", autoBatchingUrl.BatchNumber);
-                        PdfHelper.Instance.FileFromBase64(autoBatchingUrl.SummaryPage, path + summaryFileName);
-                        autoBatchingUrl.UrlList.Add("add/" + summaryFileName);
+
+                        if (String.IsNullOrEmpty(autoBatchingUrl.SummaryFileName))
+                        {
+                            await AutoBatchingUrlBl.Instance.DownloadListAsync(autoBatchingUrl.UrlList, path);
+                            
+                            PdfHelper.Instance.FileFromBase64(autoBatchingUrl.SummaryPage, path + summaryFileName);
+                            autoBatchingUrl.UrlList.Add("add/" + summaryFileName);
+                            
+                            LabelStorageUrlsBl.Instance.MergePdf(autoBatchingUrl.UrlList, mergedFileName, true);
+                        }
+                        else
+                        {
+                            BatchLabelsText batchLabelsTextBl = BatchLabelsTextBl.Instance.GetBatchLabelsText(userIdSelected, autoBatchingUrl.BatchNumber, autoBatchingUrl.AutoBatchDto.BatchNotes);
+                            if (batchLabelsTextBl != null)
+                            {
+                                summaryFileName = path + autoBatchingUrl.SummaryFileName;
+                                File.WriteAllText(mergedFileName, batchLabelsTextBl.Label);
+                                File.WriteAllText(summaryFileName, batchLabelsTextBl.Summary);
+                                filesToZip.Add(summaryFileName);
+                            }
+                        }
                         filesToZip.Add(mergedFileName);
-                        LabelStorageUrlsBl.Instance.MergePdf(autoBatchingUrl.UrlList, mergedFileName, true);
+
+
 
                         pbDownloading.Invoke(new Action(() =>
                         {

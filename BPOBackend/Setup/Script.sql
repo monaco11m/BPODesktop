@@ -35,7 +35,8 @@ where u.is_active=true
 
 select *
 from "AspNetUsers" u
-where u."UserName"='MSCHF'
+where --u."UserName"='MSCHF'
+u."Id"='54e85c54-14e5-414c-b442-5d6c54da8d9c'
 
 select *
 from "AutomateLabels" a
